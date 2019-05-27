@@ -31,7 +31,7 @@
   \PassOptionsToClass{zihao=-4}{ctexbook}
 \else
   \ifsjtu@bachelor
-    \PassOptionsToClass{zihao=5}{ctexbook}
+    \PassOptionsToClass{zihao=-4}{ctexbook}
   \else
     \PassOptionsToClass{zihao=-4}{ctexbook}
     \ifsjtu@master\relax\else
@@ -58,7 +58,7 @@
 
 \AtEndOfClass{\input{sjtuthesis.cfg}}
 
-% Chinese variables
+% Chinese variables 
 \newcommand\classification[1]{\def\sjtu@value@classification{#1}}
 \newcommand\studentnumber[1]{\def\sjtu@value@studentnumber{#1}}
 \newcommand\confidential[1]{\def\sjtu@value@confidential{#1}}
@@ -134,6 +134,8 @@
 \RequirePackage{xparse}
 \RequirePackage{tikz}
 \RequirePackage{makecell}
+\RequirePackage{CJK,CJKnumb}
+\RequirePackage{ctex}
 \usetikzlibrary{shapes.geometric, arrows}
 
 % Make hyperref to set PDF metadata (author, title, subject, keywords)
@@ -612,21 +614,23 @@
   \end{center}
   \cleardoublepage
 }
+\setCJKfamilyfont{hwxk}{华文行楷}
+\newcommand*{\xk}{\CJKfamily{hwxk}} 
 
 % “绘制”学士论文中文标题页
 \newcommand\makechinesetitle@bachelor{%
   \cleardoublepage
   \thispagestyle{empty}
   \begin{center}
-    \kaishu
+    \songti
     \vspace*{20pt} \vskip 7pt
-    \includegraphics{sjtulogo}
+    % \includegraphics{sjtulogo}
+    {\fontsize{64}{64}\xk \sjtu@value@school}
     \vskip 30pt
-    {\fontsize{32}{32}\sjtu@value@chinesedegree\sjtu@label@thesis}
+    {\fontsize{32}{32} 毕业设计（论文）}
     \vskip 15pt
-    {\zihao{-2}\MakeUppercase{Thesis of \sjtu@value@englishdegree}}
     \vskip 15pt
-    \includegraphics{sjtubadge}
+    % \includegraphics{sjtubadge}
     \vskip \stretch{2}
     {
       \zihao{2}
@@ -701,16 +705,49 @@
   \begin{center}
     ~\\[70pt]
     % \linespread{1.5}
-    {\zihao{-2}\heiti \textbf{\sjtu@value@school}} \\[12pt]
-    {\zihao{-2}\heiti \textbf{\sjtu@label@original}} \\[12pt]
+    % {\zihao{-2}\heiti \textbf{\sjtu@value@school}} \\[12pt]
+    % {\zihao{-2}\heiti \textbf{\sjtu@label@original}} \\[12pt]
+    {\zihao{-3}\songti \textbf{诚信声明}}
   \end{center}
   \vskip 10pt
   {\par\linespread{2}\zihao{4}本人郑重声明：所呈交的学位论文《\sjtu@value@chinesetitle》，\sjtu@label@originalcontent\par}
   \vskip 80pt
-  {\zihao{4}\hspace{13em}\sjtu@label@authorsign\hrulefill\hspace{1.5em}}
+  {\zihao{4}\hspace{13em}作者签名 \hrulefill\hspace{1.5em}}
   \vskip 40pt
   {\zihao{4}\hspace{11em}\sjtu@label@originalDate\hspace{1em}}
   \cleardoublepage
+}
+\newcommand\makeTaskBook{
+  \cleardoublepage
+  % \thispagestyle{empty}
+  \begin{center}
+    \vskip 10pt
+    {\zihao{-3}\heiti \textbf{毕业设计(论文)任务书}}
+    {\par 学院：\sjtu@value@institute \quad{}  专业：\sjtu@value@major  \quad{}  班级：计科1502}
+    {\par 学生：\sjtu@value@author \quad{} 指导教师： \sjtu@value@advisor    \quad{}   专业负责人： 高敬阳    }
+  \end{center}
+  \vskip 10pt
+  {\par1.设计（论文）的主要任务及目标}
+  {\par \quad{} \zihao{-4}将DQN算法及其三大改进应用到1985NES一款游戏《超级玛丽》上，控制游戏人物在不死亡的情况下运动到距离游戏起点尽可能远的位置。首要目标是尽可能远，次要目标是不会丢失生命值并尽可能的高分。}
+  {\par 2.设计（论文）的主要内容  }
+  {\par \quad{} 强化学习背后的想法是允许agent（代理）尝试播放不同的动作，环境提供奖励和惩罚。agent对基础任务（目标）一无所知，只是开始随意做事并观察执行动作后收到的惩罚和奖励。只要环境给的奖励和惩罚按照某一种规则而不是随机，那么代理就会制定出一个策略，最大起得分。强化学习是无人监督学习的内容，除了设置环境之外，人类不提供任何指导，代理必须自己尝试解决问题。但我们使用强化学习控制超级玛丽这个游戏的时候，代理制定的策略是一个黑匣子，当输入游戏的当前状态的时候，他将提供每个可能的移动（上下左右及其组合）的值得估计，然后使用估计值表现最好的。对于超级玛丽这个游戏来说，需要代理通过图像画面帧弄清楚发生了什么，需要能看到历史信息。想象一下，在看到单个图像帧时，你根本不清楚当前游戏人物处于哪个方向移动，速度是多少等等。因此对于超级玛丽来说，我们需要告诉代理历史的几个图像，提供 代理一些有意义的信息。}
+  {\par \quad{}（1）确定超级玛丽游戏使用的环境，控制接口API。}
+  {\par \quad{}（2）将DQN算法与其几个改进算法相结合。}
+  {\par \quad{}（3）制定游戏的奖励惩罚策略，控制流程。}
+  {\par \quad{}（4）将DQN算法及其改进算法应用到游戏控制的过程中，并学习。}
+  {\par \quad{}（5）观察学习的效果，提出改进措施。}
+  {\par 3.设计（论文）的主要要求 }
+  {\par \quad{}（1）DQN及其改进算法结合实现。}
+  {\par \quad{}（2）稳定控制游戏人物运动，有明显的学习效果。}
+  {\par \quad{}（3）对实验结果作分析，本算法的优缺点，提出改进方向。}
+  {\par 4.进度安排}
+
+  \begin{tabular}{|l|c|}
+    \hline
+    三月 & 完成DQN的初步搭建，以及尝试DQN控制 \\ \hline
+    四月 & 完成DQN及其改进算法，并将其控制到游戏当中观察结果并进行改进 \\ \hline
+    五月 & 撰写论文，对实验结果做处理分析，总结实验 \\ \hline
+  \end{tabular}
 }
 
 % 授权声明
@@ -768,16 +805,19 @@
     %% 前言页眉页脚
     \fancypagestyle{front}{%
       \fancyhf{}
-      \fancyhead[L]{\includegraphics{figure/sjtubanner}}
-      \fancyhead[R]{\parbox[b]{\markboxwidth}{\raggedleft\nouppercase{\sjtu@fancyhead\sjtu@value@titlemark}}}
+      % \fancyhead[L]{\includegraphics{figure/sjtubanner}}
+      % \fancyhead[C]{\parbox[b]{\markboxwidth}{\raggedleft\nouppercase{\sjtu@fancyhead\sjtu@value@school}}}
+      \fancyhead[C]{北京化工大学毕业设计论文}
       \fancyfoot[C]{\sjtu@fancyfoot{\thepage}{\lastpageref{pagesLTS.Roman}}}
+      % \fancyfoot[C]{\sjtu@fancyfoot{\thepage}{\lastpageref{pagesLTS.arabic}}}
       \renewcommand{\headheight}{32pt}
     }
     %% 正文页眉页脚
     \fancypagestyle{main}{%
       \fancyhf{}
-      \fancyhead[L]{\includegraphics{figure/sjtubanner}}
-      \fancyhead[R]{\parbox[b]{\markboxwidth}{\raggedleft\nouppercase{\sjtu@fancyhead\sjtu@value@titlemark}}}
+      % \fancyhead[L]{\includegraphics{figure/sjtubanner}}
+      % \fancyhead[C]{\parbox[b]{\markboxwidth}{\raggedleft\nouppercase{\sjtu@fancyhead\sjtu@value@school}}}
+      \fancyhead[C]{北京化工大学毕业设计论文}
       \fancyfoot[C]{\sjtu@fancyfoot{\thepage}{\lastpageref{pagesLTS.arabic}}}
       \renewcommand{\headheight}{32pt}
     }
@@ -860,7 +900,7 @@
   \zihao{4} \markboth{\sjtu@label@chineseabstract}{}
 }{
   \vspace{2ex}\noindent
-  {\zihao{4} \textbf{\sjtu@label@keywords}{\sjtu@value@keywords}}
+  {\heiti \zihao{4} \textbf{\sjtu@label@keywords \sjtu@value@keywords}}
 }
 \newenvironment{englishabstract}{%
   \cleardoublepage

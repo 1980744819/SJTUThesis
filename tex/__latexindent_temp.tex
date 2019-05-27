@@ -1,0 +1,83 @@
+\chapter{研究概论}
+深度强化学习是人工智能领域的一个新的研究热点． 它以一种通用的形式将深度学习的感知能力与强化学习的决策能力相结合，并能够通过端对端的学习方式实现从原始输入到输出的直接控制。自提出以来， 在许多需要感知高维度原始输入数据和决策控制的任务中，深度强化学习方法已经取得了实质性的突破．
+\section{深度强化学习的发展概况
+}
+\subsection{传统强化学习}
+传统强化学习主要分为基于价值的Q\_learning,和基于策略的Sarsa。
+\paragraph{Q\_learning}
+$$
+Q\left(s_{t}, a_{t}\right) \leftarrow Q\left(s_{t}, a_{t}\right)+\alpha\left[r_{t+1}+\gamma \max _{a} Q\left(s_{t+1}, a\right)-Q\left(s_{t}, a_{t}\right)\right]
+$$
+Q\_learning主要通过一张Q\_table作为输入状态与输出动作价值的估计，通过Q\_table来进行更新。
+\paragraph{Sarsa}
+Sarsa是一种on-policy算法，Q-learning是一种off-policy算法。Sarsa选取的是一种保守的策略，他在更新Q值的时候已经为未来规划好了动作，对错误和死亡比较敏感
+$$
+Q\left(s_{t}, a_{t}\right) \leftarrow Q\left(s_{t}, a_{t}\right)+\alpha\left[r_{t+1}+\gamma Q\left(s_{t+1}, a_{t+1}\right)-Q\left(s_{t}, a_{t}\right)\right]
+$$
+\subsubsection{深度学习的兴起}
+深度学习是一个很早就提出的概念，然而在最近几年才开始兴盛，主要是因为深度学习对计算机硬件计算能力要求很高，随着最近硬件的发展才逐渐能满足计算力。2012年Hinton使用AlexNet的神经网络结构参加ImageNet比赛，一举夺得第一名且碾压了第二名。此后深度学习受到了广泛的关注，越来越多的深度学习研究开展，并且在不同的领域展现出其强大的学习能力。其中卷积神经网络（CNN）的提出，极大的促进了计算机在图像处理方面的发展，特别是图像识别已经达到远远超越人类的水平。
+\subsubsection{深度强化学习的发展}
+由于深度学习在人工智能领域的大放异彩，2013和2015年DeepMind的DQN可谓是将两者成功结合的开端，它用一个深度网络代表价值函数，依据强化学习中的Q-Learning，为深度网络提供目标值，对网络不断更新直至收敛。DQN用到了两个关键技术，一是用来打破样本间关联性的样本池，二是使训练稳定性和收敛性更好的固定目标网络。之后有更多算法的提出，深度强化学习不断地涌现强大的生命力。
+\section{深度强化学习研究现状}
+深度强化学习的目前研究主要分为：基于价值和基于策略的算法，以及将两者结合的actor-critic算法。
+\subsection{基于价值}
+\paragraph{DQN}
+深度Q网络（DQN）是多层卷积神经网络，其输出给定状态s和网络参数θ的动作值向量。它是从Rn到Rm的函数，其中n是状态空间的维度，m是动作空间的维度。 Deep Q网络算法的三个关键要素是体验重放，固定目标Q网络，以及限制奖励范围。体验重播解决了之前提出的奖励通常是延时的问题。它有助于打破数据的相关性，并从过去的所有政策中学习。存储一组最近的转换以用于某些预定步骤并随机均匀地采样以更新网络。
+\subsection{基于策略}
+\paragraph{Policy Gradient}
+基于值的强化学习算法的基本思想是根据当前的状态，计算采取每个动作的价值，然后根据价值贪心的选择动作。如果我们省略中间的步骤，即直接根据当前的状态来选择动作，也就引出了强化学习中的另一种很重要的算法，即策略梯度(Policy Gradient)。
+\\
+Gradient的核心思想是更新参数时有两个考虑：如果这个回合选择某一动作，下一回合选择该动作的概率大一些，然后再看奖惩值，如果奖惩是正的，那么会放大这个动作的概率，如果奖惩是负的，就会减小该动作的概率。
+\subsubsection{Actor-Critic}
+Actor（玩家）：为了玩转这个游戏得到尽量高的reward，你需要实现一个函数：输入state，输出action，即上面的第2步。可以用神经网络来近似这个函数。剩下的任务就是如何训练神经网络，让它的表现更好（得更高的reward）。这个网络就被称为actor。
+\\
+Critic（评委）：为了训练actor，你需要知道actor的表现到底怎么样，根据表现来决定对神经网络参数的调整。这就要用到强化学习中的“Q-value”。但Q-value也是一个未知的函数，所以也可以用神经网络来近似。这个网络被称为critic。
+\\
+举个例子：
+\\
+Actor看到游戏目前的state，做出一个action。
+\\
+Critic根据state和action两者，对actor刚才的表现打一个分数。
+\\
+Actor依据critic（评委）的打分，调整自己的策略（actor神经网络参数），争取下次做得更好。
+\\
+Critic根据系统给出的reward（相当于ground truth）和其他评委的打分（critic target）来调整自己的打分策略（critic神经网络参数）。
+\\
+一开始actor随机表演，critic随机打分。但是由于reward的存在，critic评分越来越准，actor表现越来越好。
+\paragraph{DDPG}
+Deepmind在2016年提出DDPG，全称是：Deep Deterministic Policy Gradient,是将深度学习神经网络融合进DPG的策略学习方法。 
+相对于DPG的核心改进是： 采用卷积神经网络作为策略函数μμ和QQ函数的模拟，即策略网络和Q网络；然后使用深度学习的方法来训练上述神经网络。
+Q函数的实现和训练方法，采用了Deepmind 2015年发表的DQN方法 ,即 Alpha Go使用的Q函数方法。
+\paragraph{A3C}
+Asynchronous Advantage Actor-Critic, 简称 A3C.
+\\
+A3C 其实采用了Actor-Critic 的形式，但是引入了并行计算的概念。为了训练一对Actor 和 Critic，我们将Actor 和 Critic 复制成多份，然后放在不同的核中进行训练。其中需要声明一个主要的Actor-Critic (global)，不断从多个副本中更新的参数进行学习，获得新的参数，同时副本中的参数也不断从 Actor-Critic (global) 中获得并更新。
+\\
+A3C 是Google DeepMind 提出的一种解决 Actor Critic 不收敛问题的算法。A3C会创建多个并行的环境，让多个拥有副结构的 agent 同时在这些并行环境上更新主结构中的参数。并行中的 agent 们互不干扰，而主结构的参数更新受到副结构提交更新的不连续性干扰，所以更新的相关性被降低，收敛性提高。
+\paragraph{PPO(Proximal Policy Optimization)}
+在监督学习中，实现损失函数、在上面做梯度下降都很容易，而且基本上不费什么功夫调节超参数就肯定能够得到很好的结果。但是在强化学习中想要获得好结果就没有这么简单了，算法中有许多变化的部分导致难以 debug，而且需要花很大的精力在调试上才能得到好结果。PPO 则在实现的难易程度、采样复杂度、调试所需精力之间取得了新的平衡，它在每一步迭代中都会尝试计算新的策略，这样可以让损失函数最小化，同时还能保证与上一步迭代的策略间的偏差相对较小。
+PPO 是OpenAI 提出的一种解决 Policy Gradient 不好确定 Learning rate (或者 Step size) 的问题. 因为如果 step size 过大, 学出来的 Policy 会一直乱动, 不会收敛, 但如果 Step Size 太小, 对于完成训练, 我们会等到绝望. PPO 利用 New Policy 和 Old Policy 的比例, 限制了 New Policy 的更新幅度, 让 Policy Gradient 对稍微大点的 Step size 不那么敏感.
+\paragraph{DPPO（Distributed PPO）}
+DPPO相比于PPO来说就是在工程方面的改进，是一种分布式训练PPO的方法。
+\section{超级玛丽控制环境}
+\subsection{openAI gym项目介绍}
+OpenAI Gym 是一个用于开发和比较RL 算法的工具包，与其他的数值计算库兼容，如tensorflow 或者theano 库。现在主要支持的是python 语言，以后将支持其他语言。
+OpenAI Gym包含两部分：
+\begin{itemize}
+  \item gym 开源: 包含一个测试问题集，每个问题成为环境（environment），可以用于自己的强化学习算法开发，这些环境有共享的接口，允许用户设计通用的算法，例如：Atari、CartPole等。
+  \item OpenAI Gym 服务:提供一个站点和api ，允许用户对自己训练的算法进行性能比较。
+\end{itemize}
+本课题采用Christian Kauten开源的gym扩展gym-super-mario-bros。
+\subsection{动作控制}
+本课题为了使模型便于训练收敛，采用了如下动作：
+\begin{lstlisting}
+  SIMPLE_MOVEMENT = [
+    ['NOOP'],
+    ['right'],
+    ['right', 'A'],
+    ['right', 'B'],
+    ['right', 'A', 'B'],
+    ['A'],
+    ['left'],
+  ]
+\end{lstlisting}

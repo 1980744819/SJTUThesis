@@ -4,8 +4,8 @@
 %%==================================================
 
 % 双面打印
-\documentclass[doctor, openright, twoside]{sjtuthesis}
-% \documentclass[bachelor, openany, oneside, submit]{sjtuthesis}
+% \documentclass[doctor, openright, twoside]{sjtuthesis}
+\documentclass[bachelor, openany, oneside, submit]{sjtuthesis}
 % \documentclass[master, review]{sjtuthesis}
 % \documentclass[%
 %   bachelor|master|doctor|coursepaper, % 必选项，分别是学士，硕士，博士学位论文以及课程论文
@@ -16,10 +16,13 @@
 %   review,     % 盲审论文，隐去作者姓名、学号、导师姓名、致谢、发表论文和参与的项目
 %   submit      % 定稿提交的论文，插入签名扫描版的原创性声明、授权声明
 % ]
+% \bibliographystyle{ieeetr}
+% \bibliography{paper.bib}
 
 % 逐个导入参考文献数据库
-\addbibresource{bib/thesis.bib}
+% \addbibresource{bib/thesis.bib}
 % \addbibresource{bib/chap2.bib}
+\addbibresource{bib/paper.bib}
 
 \input{tex/id}  % NOTE: the enclosed commands must be executed in preamble
 
@@ -28,19 +31,20 @@
 % 无编号内容：中英文论文封面、授权页
 \maketitle
 \makeatletter
-
+\makeDeclareOriginal
+\makeTaskBook
+% \printbibliography[heading=bibintoc]
 \ifsjtu@coursepaper
 % 摘要 部分课程论文需要，可以自行选择添加或者去除
 % \include{tex/abstract}
 
 % 目录 部分课程论文需要，可以自行选择添加或者去除
 % \tableofcontents
-
 \else
   \ifsjtu@submit\relax
-    \includepdf{pdf/original.pdf}
+    % \includepdf{pdf/original.pdf}
     \cleardoublepage
-    \includepdf{pdf/authorization.pdf}
+    % \includepdf{pdf/authorization.pdf}
     \cleardoublepage
   \else
     \ifsjtu@review\relax
@@ -64,30 +68,39 @@
   \listofalgorithms
   \addcontentsline{toc}{chapter}{\listalgorithmname}  % 将算法目录加入全文目录
 
-  \include{tex/symbol} % 主要符号、缩略词对照表
+  % \include{tex/symbol} % 主要符号、缩略词对照表
 \fi
 
 \makeatother
 \mainmatter % 使用阿拉伯数字对正文编号
 
 % 正文内容
-\include{tex/intro}
-\include{tex/example}
-\include{tex/faq}
+% \include{tex/introduce}
+\include{tex/overview}
+\include{tex/alg}
+\include{tex/experiment}
+\include{tex/conclusion}
 \include{tex/summary}
+\include{tex/thanks}
+\printbibliography[heading=bibintoc]
 
-\appendix % 使用英文字母对附录编号
+% \include{tex/intro}
+% \include{tex/example}
+% \include{tex/faq}
+% \include{tex/summary}
+
+% \appendix % 使用英文字母对附录编号
 
 % 附录内容，本科学位论文可以用翻译的文献替代。
-\include{tex/app_setup}
-\include{tex/app_eq}
-\include{tex/app_cjk}
-\include{tex/app_log}
+% \include{tex/app_setup}
+% \include{tex/app_eq}
+% \include{tex/app_cjk}
+% \include{tex/app_log}
 
 \backmatter % 文后无编号部分
 
 % 参考资料
-\printbibliography[heading=bibintoc]
+
 
 % 致谢、发表论文、申请专利、参与项目、简历
 % 用于盲审的论文需隐去致谢、发表论文、申请专利、参与的项目
@@ -101,24 +114,24 @@
 
   % 盲审删去删去致谢页
   \ifsjtu@review\relax\else
-    \include{tex/ack}         % 致谢
+    % \include{tex/ack}         % 致谢
   \fi
 
-  \ifsjtu@bachelor
-    % 学士学位论文要求在最后有一个英文大摘要，单独编页码
-    \include{tex/end_english_abstract}
-  \else
-    % 盲审论文中，发表学术论文及参与科研情况等仅以第几作者注明即可，不要出现作者或他人姓名
-    \ifsjtu@review\relax
-      \include{tex/pubreview}
-      \include{tex/projectsreview}
-    \else
-      \include{tex/pub}       % 发表论文
-      \include{tex/projects}  % 参与的项目
-      % \include{tex/patents}   % 申请专利
-      \include{tex/resume}    % 个人简历
-    \fi
-  \fi
+  % \ifsjtu@bachelor
+  %   % 学士学位论文要求在最后有一个英文大摘要，单独编页码
+  %   % \include{tex/end_english_abstract}
+  % \else
+  %   % 盲审论文中，发表学术论文及参与科研情况等仅以第几作者注明即可，不要出现作者或他人姓名
+  %   \ifsjtu@review\relax
+  %     \include{tex/pubreview}
+  %     \include{tex/projectsreview}
+  %   \else
+  %     \include{tex/pub}       % 发表论文
+  %     \include{tex/projects}  % 参与的项目
+  %     % \include{tex/patents}   % 申请专利
+  %     \include{tex/resume}    % 个人简历
+  %   \fi
+  % \fi
 \fi
 
 \makeatother
