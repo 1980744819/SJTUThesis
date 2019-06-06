@@ -33,7 +33,7 @@
 \makeatletter
 \makeDeclareOriginal
 \makeTaskBook
-% \printbibliography[heading=bibintoc]
+\printbibliography[heading=bibintoc]
 \ifsjtu@coursepaper
 % 摘要 部分课程论文需要，可以自行选择添加或者去除
 % \include{tex/abstract}
@@ -89,13 +89,14 @@
 % \include{tex/faq}
 % \include{tex/summary}
 
-% \appendix % 使用英文字母对附录编号
+\appendix % 使用英文字母对附录编号
 
 % 附录内容，本科学位论文可以用翻译的文献替代。
 % \include{tex/app_setup}
 % \include{tex/app_eq}
 % \include{tex/app_cjk}
 % \include{tex/app_log}
+\include{tex/code}
 
 \backmatter % 文后无编号部分
 
